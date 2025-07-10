@@ -3,6 +3,11 @@ import "./globals.css";
 export const metadata = {
   title: "DomainDrip",
   description: "AI-powered domain discovery platform",
+import "./globals.css";
+
+export const metadata = {
+  title: "DomainDrip",
+  description: "AI-powered domain discovery platform",
 };
 
 export default function RootLayout({ children }) {
@@ -14,4 +19,5 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
 
