@@ -1,26 +1,21 @@
 export default function Home() {
   return (
-    <main className="min-h-screen px-6 py-10 bg-white text-black">
-      <h1 className="text-blue-400 font-semibold mb-2 text-sm">✨ AI-Powered Domain Discovery</h1>
-      <h2 className="text-4xl md:text-5xl font-bold mb-4">
+    <main className="flex min-h-screen flex-col items-center justify-center px-4 text-center bg-white text-black">
+      <span className="mb-4 text-sm text-gray-500">✨ AI-Powered Domain Discovery</span>
+      <h1 className="text-4xl font-bold mb-2">
         Find the Perfect <span className="text-blue-500">Domain Name</span>
-      </h2>
-      <p className="text-gray-400 text-lg mb-6">
+      </h1>
+      <p className="mb-6 text-gray-600">
         Discover available domains with AI-powered suggestions, real-time pricing, and smart search patterns.
       </p>
-      <form className="flex flex-col sm:flex-row gap-4">
-        <input
-          type="text"
-          placeholder="Enter keyword or idea..."
-          className="border border-gray-300 rounded-lg px-4 py-2 w-full"
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg"
-        >
-          Search Domains
-        </button>
-      </form>
+      <input
+        type="text"
+        placeholder="Enter keyword or idea..."
+        className="w-full max-w-xl px-4 py-2 border border-gray-300 rounded-md mb-4"
+      />
+      <button className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition">
+        Search Domains
+      </button>
     </main>
   );
 }
