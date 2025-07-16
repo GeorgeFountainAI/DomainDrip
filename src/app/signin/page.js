@@ -1,26 +1,63 @@
-export default function SigninPage() {
+'use client';
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+
+export default function SignInPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const params = useSearchParams();
+  const error = params.get('error');
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    await signIn('credentials', {
+      email,
+      password,
+      callbackUrl: '/dashboard',
+    });
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-white text-black">
-      <h1 className="text-4xl font-bold mb-4">Sign In</h1>
-      <p className="mb-6 text-lg">Welcome back! Please sign in to continue.</p>
-      <form className="flex flex-col gap-4 w-full max-w-sm">
+    <div className="max-w-md mx-auto mt-10 text-white">
+      <h2 className="text-2xl font-bold mb-4">Sign In</h2>
+
+      {error && <p className="text-red-500">Invalid login</p>}
+
+      <form onSubmit={handleLogin} className="space-y-4">
         <input
           type="email"
           placeholder="Email"
-          className="p-3 border rounded"
+          className="w-full p-2 border text-black"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
           placeholder="Password"
-          className="p-3 border rounded"
+          className="w-full p-2 border text-black"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition"
-        >
+        <button type="submit" className="bg-black text-white p-2 w-full">
           Sign In
         </button>
       </form>
-    </main>
+
+      <div className="mt-4 text-center">
+        <button
+          onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+          className="underline"
+        >
+          Sign in with Google
+        </button>
+        <div className="mt-2">
+          <Link href="/forgot-password" className="text-sm underline">
+            Forgot password?
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }
