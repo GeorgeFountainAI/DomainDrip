@@ -1,16 +1,20 @@
-export const runtime = "edge";
+export const runtime = 'edge';
 
-export default async function handler(req) {
-  if (req.method !== "POST") {
-    return new Response("Method Not Allowed", { status: 405 });
-  }
-
+export async function POST(req) {
   try {
     const body = await req.json();
-    console.log("Webhook payload:", body);
-    return new Response("Received", { status: 200 });
+
+    // ✅ Example logic for a webhook payload
+    console.log('Webhook received:', body);
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+    });
   } catch (error) {
-    console.error("Webhook error:", error);
-    return new Response("Error", { status: 500 });
+    console.error('Webhook error:', error);
+
+    return new Response(JSON.stringify({ success: false, error: 'Invalid payload' }), {
+      status: 400,
+    });
   }
 }
