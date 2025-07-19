@@ -1,22 +1,19 @@
-export const runtime = 'edge';
+// app/api/webhooks/route.js (or .ts if you're using TypeScript)
 
-export async function POST(request) {
+import { NextResponse } from "next/server";
+
+export const runtime = "nodejs"; // 👈 NEW required syntax for Next.js 13.4+
+
+export async function POST(req) {
   try {
-    const body = await request.json();
+    const body = await req.text();
 
-    // ✅ Do something with the webhook data
+    // You can replace this with actual Stripe handling logic later
     console.log("Webhook received:", body);
 
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (error) {
-    console.error("Webhook Error:", error);
-
-    return new Response(JSON.stringify({ success: false, error: 'Invalid payload' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return NextResponse.json({ received: true });
+  } catch (err) {
+    console.error("Webhook error:", err);
+    return new NextResponse("Webhook handler failed", { status: 500 });
   }
 }

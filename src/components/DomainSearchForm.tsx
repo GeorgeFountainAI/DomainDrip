@@ -1,57 +1,55 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
+import DomainResults from './DomainResults';
 
 export default function DomainSearchForm() {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<string[]>([]);
+  const [keyword, setKeyword] = useState('');
+  const [domains, setDomains] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const handleSearch = async (e: FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!keyword) return;
+
     setLoading(true);
 
-    // Simulate fake domain results
-    setTimeout(() => {
-      setResults([
-        `${query}.com`,
-        `${query}.net`,
-        `get${query}.ai`,
-        `${query}hub.io`,
-        `${query}-site.dev`
-      ]);
-      setLoading(false);
-    }, 1000);
+    try {
+      const res = await fetch('/api/suggest-domains', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ keyword }),
+      });
+
+      const data = await res.json();
+      setDomains(data.suggestions || []);
+    } catch (error) {
+      console.error('Domain search error:', error);
+    }
+
+    setLoading(false);
   };
 
   return (
-    <div className="max-w-xl mx-auto">
-      <form onSubmit={handleSearch} className="mb-4">
+    <div className="w-full max-w-2xl mx-auto mt-8">
+      <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4">
         <input
           type="text"
-          placeholder="Enter a domain keyword"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="w-full p-2 text-black rounded"
+          placeholder="Enter a keyword"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-md"
         />
         <button
           type="submit"
-          className="mt-2 p-2 bg-blue-600 text-white rounded w-full"
+          disabled={loading}
+          className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700"
         >
           {loading ? 'Searching...' : 'Search Domains'}
         </button>
       </form>
 
-      {results.length > 0 && (
-        <div className="bg-gray-800 p-4 rounded">
-          <h2 className="text-lg font-bold mb-2">Results:</h2>
-          <ul>
-            {results.map((domain, index) => (
-              <li key={index} className="text-green-400">{domain}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {domains.length > 0 && <DomainResults domains={domains} />}
     </div>
   );
 }
