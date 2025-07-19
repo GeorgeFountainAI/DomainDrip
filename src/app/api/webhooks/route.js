@@ -4,16 +4,16 @@ export async function POST(req) {
   try {
     const body = await req.json();
 
-    // ✅ Example logic for a webhook payload
-    console.log('Webhook received:', body);
+    // ✅ Do something with the webhook data
+    console.log("Webhook received:", body);
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
     });
-  } catch (error) {
-    console.error('Webhook error:', error);
+  } catch (err) {
+    console.error("Webhook error:", err);
 
-    return new Response(JSON.stringify({ success: false, error: 'Invalid payload' }), {
+    return new Response(JSON.stringify({ success: false, error: "Invalid payload" }), {
       status: 400,
     });
   }
